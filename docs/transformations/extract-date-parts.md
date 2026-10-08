@@ -1,7 +1,7 @@
 ---
 title: Extract date parts
-search: extract date parts year month day weekday hour datetime components
-description: The Extract date parts node (extractDateParts) adds year, month, day, weekday, or hour columns from a date or datetime column. With pandas code.
+search: extract date parts year quarter month week day day_of_year weekday hour minute datetime components
+description: The Extract date parts node (extractDateParts) adds calendar and time-part columns from a date or datetime column. With pandas code.
 ---
 
 # Extract date parts — `extractDateParts`
@@ -42,7 +42,7 @@ columns are preserved.
 | Config key | Type | Required | Description |
 | --- | --- | --- | --- |
 | `column` | string | Yes | Date/datetime column |
-| `parts` | string[] | Yes | Any of `year`, `month`, `day`, `weekday`, `hour` |
+| `parts` | string[] | Yes | Any of `year`, `quarter`, `month`, `week`, `day`, `day_of_year`, `weekday`, `hour`, `minute` |
 
 Each part becomes a new column named `<column>_<part>` (e.g. `ordered_at_year`).
 
@@ -57,6 +57,9 @@ df_2 = df_1.assign(ordered_at_year=_dt.dt.year, ordered_at_month=_dt.dt.month)
 
 - **`weekday` is Monday=0 … Sunday=6** (consistent across pandas and polars
   exports — verified by the parity tests).
+- **`week` uses ISO-8601 week numbering** in both pandas and Polars. Weeks
+  start on Monday, and week 1 is the first week with a Thursday in the calendar
+  year, so dates near New Year can belong to the previous or next ISO week-year.
 - If the source is text, [Parse dates](./parse-dates.md) or
   [Change types](./cast-types.md) → `datetime` first; this node also parses on the
   fly but an explicit parse is clearer.
